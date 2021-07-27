@@ -1,31 +1,38 @@
 import time
 import timeit
 
-# The function took 5 hours, 4 minutes, 7 seconds y 100 milliseconds to be executed.
-
-def function1():
-    print("Starting function 1")
+# Function to be measured
+def functionTest():
+    print("Starting function functionTest()")
     time.sleep(3)
-    print("Function 1 finished")
+    print("Function functionTest() finished")
 
-# function1()
+# Since timeit results are expressed in seconds we'll use these constants
+SECONDS_PER_MINUTE = 60
+MINUTES_PER_HOUR = 60
+SECONDS_PER_HOUR = SECONDS_PER_MINUTE * MINUTES_PER_HOUR # 3600
+MILLIS_PER_SECOND = 1000
+
+# We can run the same function multiple times and the execution time will be the sum
+# i.e. We could add additional logic to run multiple times and get an average execution time
+NUMBER_OF_EXECUTIONS = 1
 
 def measureExecutionTime():
-    # executionTime = timeit.timeit(stmt=function1, number=1)
-    executionTime = 325468742.10254354
+    executionTime = timeit.timeit(stmt=functionTest, number=NUMBER_OF_EXECUTIONS)
+    # executionTime = 325468742.10254354
 
-    # 1 min = 60 sec
-    # 1 hour = 60 min = 3600 sec
+    hours = int(executionTime / SECONDS_PER_HOUR)
+    executionTime -= hours * SECONDS_PER_HOUR
 
-    hours = int(executionTime / 3600)
-    executionTime = executionTime - hours * 3600
-    minutes = int(executionTime / 60)
-    executionTime = executionTime - minutes * 60
+    minutes = int(executionTime / SECONDS_PER_MINUTE)
+    executionTime -= minutes * SECONDS_PER_MINUTE
+
     seconds = int(executionTime)
-    executionTime = executionTime - seconds
+    executionTime -= seconds
 
-    # 0.5 seconds = 500 milliseconds
-    milliseconds = int(executionTime * 1000)
+    # At this point we only have the decimal part
+    # e.g. 0.5 seconds = 500 milliseconds
+    milliseconds = int(executionTime * MILLIS_PER_SECOND)
 
     print "Execution time"
     print hours, "hours"
